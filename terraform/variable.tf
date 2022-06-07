@@ -1,14 +1,33 @@
 variable "project_id" {
-    description = "project id used on this terraform"
-    type = string
-    default = "spatial-lodge-350205"
+  description = "project id used on this terraform"
+  type = string
+  default = "sunlit-flag-351808"
+}
+
+variable "docker_image"{
+  description = "Docker image from container registry"
+  type = string
+  default = "asia.gcr.io/sunlit-flag-351808/webapi:latest"
 }
 
 variable "region" {
-    description = "Region used"
-    type = string
-    default = "us-central1"
+  description = "Region used"
+  type = string
+  default = "asia-southeast2"
 }
+
+variable "network"{
+  description = "network"
+  type = string
+  default = "webapi-net"
+}
+
+variable "subnet"{
+  description = "subnetwork"
+  type = string
+  default = "webapi-subnet"
+}
+
 
 variable "service_account" {
   type = object({
@@ -16,7 +35,7 @@ variable "service_account" {
     scopes = list(string)
   })
   default = {
-    email  = "instance-template@spatial-lodge-350205.iam.gserviceaccount.com"
+    email  = "terraform@sunlit-flag-351808.iam.gserviceaccount.com"
     scopes = ["cloud-platform"]
   }
 }
