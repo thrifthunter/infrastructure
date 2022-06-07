@@ -17,15 +17,6 @@ resource "google_compute_global_address" "webapi_static_ip" {
 }
 
 
-resource "google_compute_global_forwarding_rule" "webapi_forwarding_rule" {
-  name                  = "webapi-forwarding-rule"
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
-  port_range            = "80"
-  target                = google_compute_target_http_proxy.webapi_http_proxy.id
-  ip_address            = google_compute_global_address.webapi_static_ip.id
-}
-
 resource "google_compute_health_check" "webapi_lb_hc" {
   name        = "webapi-lb-hc"
   description = "Health check via tcp"
@@ -51,7 +42,7 @@ resource "google_compute_backend_service" "webapi_backend" {
   enable_cdn               = false
   health_checks            = [google_compute_health_check.webapi_lb_hc.id]
   backend {
-    group           = module.mig.instance_group
+    group           = module.vm_mig.instance_group
     balancing_mode  = "UTILIZATION"
     capacity_scaler = 1.0
   }
@@ -63,7 +54,11 @@ resource "google_compute_url_map" "webapi_url_map" {
   default_service = google_compute_backend_service.webapi_backend.id
 }
 
-resource "google_compute_target_http_proxy" "webapi_http_proxy" {
-  name     = "webapi-http-proxy"
-  url_map  = google_compute_url_map.webapi_url_map.id
+resource "google_compute_global_forwarding_rule" "webapi_forwarding_rule" {
+  name                  = "webapi-forwarding-rule"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL"
+  port_range            = "443"
+  target                = google_compute_target_https_proxy.webapi_https_proxy.id
+  ip_address            = google_compute_global_address.webapi_static_ip.id
 }

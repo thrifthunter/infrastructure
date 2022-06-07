@@ -1,11 +1,11 @@
-module "gce-container" {
+module "container-vm" {
     source = "terraform-google-modules/container-vm/google"
     container = {
-        image = var.image
+        image = var.docker_image
     }
 }
 
-module "mig_template" {
+module "vm_instance_template" {
     name_prefix         = "webapi-templates"
     source              = "terraform-google-modules/vm/google//modules/instance_template"
     version             = "~> 7.3"
@@ -16,26 +16,26 @@ module "mig_template" {
     service_account      = var.service_account
     source_image_family  = "cos-stable"
     source_image_project = "cos-cloud"
-    source_image         = reverse(split("/", module.gce-container.source_image))[0]
+    source_image         = reverse(split("/", module.container-vm.source_image))[0]
     metadata             = {
-        "gce-container-declaration" = module.gce-container.metadata_value
+        "gce-container-declaration" = module.container-vm.metadata_value
         "google-logging-enabled"    = true
     }
     tags = [
-        "http-server"
-        "thrit-api"
+        "http-server", 
+        "thrift-api"
     ]
     labels = {
-        "container-vm" = module.gce-container.vm_container_label
+        "container-vm" = module.container-vm.vm_container_label
     }
     disk_size_gb = 40
 }
 
-module "mig" {
+module "vm_mig" {
     hostname            = "webapi"
     source              = "terraform-google-modules/vm/google//modules/mig"
     version             = "~> 7.3"
-    instance_template   = module.mig_template.self_link
+    instance_template   = module.vm_instance_template.self_link
     region              = var.region
     network             = var.network
     subnetwork          = var.subnet

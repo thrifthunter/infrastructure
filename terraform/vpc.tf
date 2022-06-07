@@ -4,8 +4,8 @@ resource "google_compute_network" "webapi_network" {
 }
 
 resource "google_compute_subnetwork" "webapi_subnet" {
-  name          = var.subnetwork
+  name          = var.subnet
   ip_cidr_range = "10.240.0.0/20"
   region        = var.region
-  network       = google_compute_network.custom-test.id
+  network       = var.network
 }
