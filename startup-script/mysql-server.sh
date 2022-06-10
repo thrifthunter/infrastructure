@@ -21,7 +21,9 @@ mysql -e "GRANT ALL PRIVILEGES ON thrifthunter.* TO 'thrift'@'%.sunlit-flag-3518
 
 
 #Pull database DDL and DML
-git clone https://github.com/thrifthunter/dbms /root/dbms
+git clone https://github.com/thrifthunter/dbms.git /root/dbms
+rm /root/dbms/ddl/.all_files.sql
+cat /root/dbms/ddl/*.sql  > /root/dbms/ddl/.all_files.sql
 mysql -D thrifthunter < /root/dbms/ddl/.all_files.sql
 
 #Creating variable
