@@ -30,11 +30,11 @@ MOUNT_POINT="/media/data"
 UUID=$(blkid | grep -oE "/dev/sdb: UUID=\".*\" " | grep -oE "\".*\"")
 
 mkfs -t ext4 $DISK_LOCATION
-mkdir $MOUNT_POINT
+mkdir -p $MOUNT_POINT
 mount $DISK_LOCATION $MOUNT_POINT
 grep -qxF "UUID=$UUID $MOUNT_POINT ext4 defaults 0 2" /etc/fstab || echo "UUID=$UUID $MOUNT_POINT ext4 defaults 0 2" >> /etc/fstab 
 systemctl stop mysql 
-mv /var/lib/mysql/ $MOUNT_POINT/.
+mv -vn /var/lib/mysql/ $MOUNT_POINT/.
 
 DATADIR="datadir = $MOUNT_POINT/mysql"
 LOGBIN="log_bin = $MOUNT_POINT/mysql/mysql-bin.log"

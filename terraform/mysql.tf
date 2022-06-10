@@ -1,9 +1,8 @@
 resource "google_compute_address" "mysql_private_ip" {
   name         = "mysql-ip"
-  network      = var.network
   subnetwork   = var.subnet
   address_type = "INTERNAL"
-  address      = "10.240.3.36"
+  address      = "10.240.0.36"
   region       = var.region
 }
 
@@ -22,8 +21,6 @@ resource "google_compute_instance" "mysql_instance" {
   name          = "mysql-instance"
   machine_type  = "e2-micro"
   zone          = var.zone
-  network       = var.network
-  subnetwork    = var.subnet
   tags          = ["http-server", "mysql-server"]
 
   boot_disk {
@@ -40,8 +37,8 @@ resource "google_compute_instance" "mysql_instance" {
   }
 
   network_interface {
-    network     = var.network
-    network_ip  = google_compute_address.mysql_private_ip
+    subnetwork     = var.subnet
+    network_ip     = google_compute_address.mysql_private_ip.self_link
   }
 
   metadata = {
