@@ -16,6 +16,12 @@ variable "region" {
   default = "asia-southeast2"
 }
 
+variable "zone" {
+  description = "Zone used"
+  type = string
+  default = "asia-southeast2-c"
+}
+
 variable "network"{
   description = "network"
   type = string
