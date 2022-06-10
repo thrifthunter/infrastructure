@@ -28,7 +28,7 @@ module "vm_instance_template" {
     labels = {
         "container-vm" = module.container-vm.vm_container_label
     }
-    disk_size_gb = 40
+    disk_size_gb = 32
 }
 
 module "vm_mig" {
