@@ -16,8 +16,8 @@ systemctl restart mysql
 
 #Create Mysql user and database
 mysql -e "CREATE DATABASE thrifthunter;"
-mysql -e "CREATE USER 'thrift'@'10.240.0.7/255.255.240.0' IDENTIFIED BY 'hhrifttunter';"
-mysql -e "GRANT ALL PRIVILEGES ON thrifthunter.* TO 'thrift'@'%';"
+mysql -e "CREATE USER 'thrift'@'%.sunlit-flag-351808.internal' IDENTIFIED WITH mysql_native_password BY 'hhrifttunter';"
+mysql -e "GRANT ALL PRIVILEGES ON thrifthunter.* TO 'thrift'@'%.sunlit-flag-351808.internal';"
 
 
 #Pull database DDL and DML
